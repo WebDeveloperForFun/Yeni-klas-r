@@ -1,25 +1,43 @@
 let clock = document.getElementById("clock");
-let  time = document.getElementById("time");
-let  buttons = document.getElementById("buttons");
+let time = document.getElementById("time");
+let buttons = document.getElementById("buttons");
 let start = document.getElementById("start");
 let restart = document.getElementById("restart");
-let stop = document.getElementById("stop");
-let date = Date.now();
+let stoper = document.getElementById("stop");
+let date1;
 let ElaspedTime = 0;
+let IntervalId;
 
-start.addEventListener("click" , ()=>{
+start.addEventListener("click", () => {
+    date1 = Date.now() - ElaspedTime;
+    IntervalId = setInterval(timer, 75);
+});
 
-    let date1 = date - ElaspedTime;
-    let ElaspedTime = date - date1
-    setInterval(function() {
-        console.log((ElaspedTime/1000) %60 );
-    
-    }, 1000);
-    
-})
-stop.addEventListener("click" , ()=>{
-    
-})
-restart.addEventListener("click" , ()=>{
-    
-})
+restart.addEventListener("click", () => {
+    clearInterval(IntervalId); // Zamanlayıcıyı temizle
+    ElaspedTime = 0;
+    time.textContent = "00:00:00"; // Saat, dakika ve saniyeyi sıfırla
+});
+
+stoper.addEventListener("click", () => {
+    if (IntervalId) {
+        clearInterval(IntervalId); // Zamanlayıcıyı durdur
+        IntervalId = null; // IntervalId'yi null olarak ayarla
+    } 
+});
+
+function timer() {
+    ElaspedTime = Date.now() - date1;
+    let sec = Math.floor((ElaspedTime / 1000) % 60);
+    let mins = Math.floor((ElaspedTime / (1000 * 60)) % 60);
+    let hours = Math.floor((ElaspedTime / (1000 * 60 * 60)) % 60);
+    sec = path(sec);
+    mins = path(mins);
+    hours = path(hours);
+    time.textContent = `${hours}:${mins}:${sec}`;
+}
+
+function path(unit){
+    return (("0") + unit).length > 2 ? unit : "0" + unit 
+
+}
